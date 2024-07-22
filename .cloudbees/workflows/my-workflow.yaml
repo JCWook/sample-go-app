@@ -14,3 +14,9 @@ jobs:
         shell: sh
         run: |
           echo "hello world"
+      - name: Publish evidence
+        uses: cloudbees-io/publish-evidence-item
+        with:
+            content: |
+              - item1
+              - item2    
