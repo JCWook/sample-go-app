@@ -36,4 +36,4 @@ jobs:
         env:
           secret1: ${{secrets.secret1}}
         run: |
-          echo "Made available as env variables too. secret: ''${secret1:0:2}${secret1:2}'"             
+          echo "Made available as env variables too. secret: ''${secret1:0:2} ${secret1:2}'"             
