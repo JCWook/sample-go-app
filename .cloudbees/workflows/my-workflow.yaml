@@ -14,12 +14,6 @@ jobs:
         shell: sh
         run: |
           echo "hello world"
-      - name: Say hello from push event
-        if: ${{ cloudbees.event_name == 'push' }}
-        uses: docker://golang:1.20.3-alpine3.17
-        shell: sh
-        run: |
-          echo "Event payload ${{ cloudbees.event.pusher.name }}"    
       - name: Publish evidence
         uses: cloudbees-io/publish-evidence-item
         with:
