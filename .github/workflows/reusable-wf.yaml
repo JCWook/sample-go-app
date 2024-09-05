@@ -11,7 +11,9 @@ on:
       env_password:
         required: true
 jobs:
-  Deploy:
+  deploy:
+    name: Deploy to ${{ inputs.environment }}
+    environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
