@@ -6,7 +6,7 @@ on:
 jobs:
   deploy_dev:
     name: Deploy to Dev
-    uses: JCWook/sample-go-app/.github/workflows/reusable-wf.yaml@main
+    uses: JCWook/sample-go-app/.github/workflows/reusable-wf.yaml@stem
     with:
       deploy_env: dev
     secrets:
@@ -14,7 +14,7 @@ jobs:
       
   deploy_prod:
     name: Deploy to Prod
-    uses: JCWook/sample-go-app/.github/workflows/reusable-wf.yaml@main
+    uses: JCWook/sample-go-app/.github/workflows/reusable-wf.yaml@stem
     with:
       deploy_env: prod
     secrets:
