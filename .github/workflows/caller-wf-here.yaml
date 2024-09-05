@@ -10,7 +10,7 @@ jobs:
     with:
       deploy_env: dev
     secrets:
-      env_password: ${{ secrets.ENV_PWD }}
+      env_password: ${{ secrets.ENV_PWD_JCW }}
       
   deploy_prod:
     name: Deploy to Prod
@@ -18,4 +18,4 @@ jobs:
     with:
       deploy_env: prod
     secrets:
-      env_password: ${{ secrets.ENV_PWD }}
+      env_password: ${{ secrets.ENV_PWD_JCW }}
