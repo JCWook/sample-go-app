@@ -24,6 +24,16 @@ jobs:
             echo "This is the *prod* password!"
           else
             echo "This is *not* the prod password!"
+            if [[ $PASSWORD == "DEVTEST" ]]; then
+              echo "This is the *devtest* password!"
+            else 
+              echo "This is *not* the devtest password!"
+            fi
+            if [[ $PASSWORD == "DEV" ]]; then
+              echo "This is the *dev* password!"
+            else 
+              echo "This is *not* the dev password!"
+            fi
           fi
         env:
           PASSWORD: ${{ secrets.env_password }}
