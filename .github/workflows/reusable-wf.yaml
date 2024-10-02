@@ -16,9 +16,8 @@ jobs:
     environment: ${{ inputs.deploy_env }}
     runs-on: ubuntu-latest
     steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo " Deploying to env ${{ inputs.deploy_env }}"
       - run: |
+          Deploying to env ${{ inputs.deploy_env }}
           echo Password is $PASSWORD
           if [[ $PASSWORD == "PROD" ]]; then
             echo "This is the *prod* password!"
