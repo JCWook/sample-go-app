@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          Deploying to env ${{ inputs.deploy_env }}
+          echo "Deploying to env ${{ inputs.deploy_env }}"
           echo Password is $PASSWORD
           if [[ $PASSWORD == "PROD" ]]; then
             echo "This is the *prod* password!"
