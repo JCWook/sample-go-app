@@ -6,14 +6,13 @@ on:
     branches:
       - "**"
   workflow_dispatch:
-    
 jobs:
   ask-now:
+    timeout-minutes: 4320
     delegates: cloudbees-io/manual-approval/custom-job.yml@v1
     with:
-      approvers: 0cb88e48-03d3-11eb-9d67-42010a83ae35
+      approvers: 3bbc24ac-e80d-11ea-a794-42010a83ae1a
       disallowLaunchByUser: false
-      notifyAllEligibleUsers: false
       instructions: test instr
       debug: true
   hello:
