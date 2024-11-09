@@ -6,6 +6,7 @@ on:
     branches:
       - "**"
   workflow_dispatch:
+    
   schedule:
     - cron: 4,10,15,20,25,30,35,40,45,51,56 * * * *
     
