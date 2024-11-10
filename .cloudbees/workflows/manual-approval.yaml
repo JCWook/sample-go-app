@@ -17,7 +17,7 @@ jobs:
       disallowLaunchByUser: false
       notifyAllEligibleUsers: false
       instructions: Please approve this if all is good.
-      debug: false    
+      debug: true    
   hello:
     steps:
       - uses: docker://alpine/git:latest
