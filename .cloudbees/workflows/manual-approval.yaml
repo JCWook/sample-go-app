@@ -16,8 +16,8 @@ jobs:
       approvers: 3bbc24ac-e80d-11ea-a794-42010a83ae1a
       disallowLaunchByUser: false
       notifyAllEligibleUsers: false
-      instructions: test instr
-      debug: true    
+      instructions: Please approve this if all is good.
+      debug: false    
   hello:
     steps:
       - uses: docker://alpine/git:latest
