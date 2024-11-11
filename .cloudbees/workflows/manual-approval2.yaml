@@ -7,15 +7,15 @@ on:
       - "**"
   workflow_dispatch:
     
-  #schedule:
-  #  - cron: 4,10,15,20,25,30,35,40,45,51,56 * * * *
+  schedule:
+    - cron: 4,10,15,20,25,30,35,40,45,51,56 * * * *
     
 jobs:
   ask-now:
     delegates: cloudbees-io/manual-approval/custom-job.yml@main
     timeout-minutes: 4320
     with:
-      approvers: 3bbc24ac-e80d-11ea-a794-42010a83ae1a
+      #approvers: 3bbc24ac-e80d-11ea-a794-42010a83ae1a
       disallowLaunchByUser: false
       notifyAllEligibleUsers: false
       instructions: test instr
