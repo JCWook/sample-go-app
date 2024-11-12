@@ -1,0 +1,21 @@
+# This workflow will build a golang project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
+
+name: Go
+
+on:
+  push:
+    branches: [ "stem" ]
+  pull_request:
+    branches: [ "stem" ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    environment: 
+      name: devtest
+      url: devtest-url
+    steps:
+    - name: Deploy-job
+      run: echo "Deployment complete"
