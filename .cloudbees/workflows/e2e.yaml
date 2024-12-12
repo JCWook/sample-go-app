@@ -28,3 +28,12 @@ jobs:
         with:
           destination: index.docker.io/${{ vars.QUICKSTART_DOCKER_USERNAME }}/my-sample-go-app:latest,index.docker.io/urvashisingh/my-sample-go-app:${{cloudbees.version}}
           labels: app=cbp,run=3
+    needs:
+      - approve-me
+  approve-me:
+    timeout-minutes: 4320
+    delegates: cloudbees-io/manual-approval/custom-job.yml@v1
+    with:
+      approvers: 3bbc24ac-e80d-11ea-a794-42010a83ae1a
+      disallowLaunchByUser: false
+      instructions: Manually approve this run
