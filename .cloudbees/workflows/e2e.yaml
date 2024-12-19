@@ -28,6 +28,18 @@ jobs:
         with:
           destination: index.docker.io/${{ vars.QUICKSTART_DOCKER_USERNAME }}/my-sample-go-app:latest,index.docker.io/urvashisingh/my-sample-go-app:${{cloudbees.version}}
           labels: app=cbp,run=3
+      - uses: cloudbees-io/register-build-artifact@v1
+        name: register artifact
+        with:
+          version: "1.1"
+          url: art1:1.1
+          name: art1
+      - uses: cloudbees-io/register-build-artifact@v1
+        name: register artifact2
+        with:
+          version: "1.2"
+          url: art1:1.1
+          name: art1    
     needs:
       - approve-me
   approve-me:
