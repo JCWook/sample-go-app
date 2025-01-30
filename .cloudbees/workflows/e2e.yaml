@@ -26,7 +26,7 @@ jobs:
       - uses: cloudbees-io/kaniko@v1
         name: Push image to OCI registry
         with:
-          destination: index.docker.io/${{ vars.QUICKSTART_DOCKER_USERNAME }}/my-sample-go-app:1.1.1
+          destination: index.docker.io/${{ vars.QUICKSTART_DOCKER_USERNAME }}/my-sample-go-app:${{cloudbees.version}}
   approve-me:
     needs:
       - build
