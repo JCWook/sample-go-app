@@ -26,11 +26,10 @@ jobs:
       - uses: cloudbees-io/kaniko@v1
         name: Push image to OCI registry
         with:
-          destination: index.docker.io/${{ vars.QUICKSTART_DOCKER_USERNAME }}/my-sample-go-app:latest,index.docker.io/urvashisingh/my-sample-go-app:${{cloudbees.version}}
-          labels: app=cbp,run=3
-    needs:
-      - approve-me
+          destination: index.docker.io/${{ vars.QUICKSTART_DOCKER_USERNAME }}/my-sample-go-app:1.1.1
   approve-me:
+    needs:
+      - build
     timeout-minutes: 4320
     delegates: cloudbees-io/manual-approval/custom-job.yml@v1
     with:
@@ -38,6 +37,8 @@ jobs:
       disallowLaunchByUser: false
       instructions: Manually approve this run
   register-deploy-artifact:
+    needs:
+      - approve-me
     steps:
       - uses: cloudbees-io/register-deployed-artifact@v1
         name: step1
