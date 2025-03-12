@@ -56,3 +56,14 @@ jobs:
           digest: d1
           name: art1
           target-environment: us-env
+  job1:
+    steps:
+      - uses: cloudbees-io/register-deployed-artifact@v1
+        name: step1
+        with:
+          version: "1.1"
+          url: art-url
+          digest: d1
+          name: art1
+          target-environment: us-env
+    needs: register-deploy-artifact
