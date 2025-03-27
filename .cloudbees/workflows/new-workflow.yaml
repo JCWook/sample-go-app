@@ -16,12 +16,7 @@ on:
       bool1:
         type: boolean
         default: false
-      options:
-        type: choice
-        options:
-          - op1
-          - op2
-        default: op1
+
 jobs:
   build:
     steps:
