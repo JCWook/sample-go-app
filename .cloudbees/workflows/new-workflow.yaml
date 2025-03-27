@@ -20,6 +20,7 @@ on:
         type: choice
         options:
           - op1
+          - op2 
 jobs:
   build:
     steps:
