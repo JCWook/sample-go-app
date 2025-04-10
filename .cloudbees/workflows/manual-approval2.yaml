@@ -13,7 +13,14 @@ jobs:
       disallowLaunchByUser: false
       instructions: manual approval test using handler image from public prod ECR registry
       approvalInputs: |
-        {}
+        test:
+          type: string
+          required: true
+        ch:
+          type: choice
+          options:
+            - op1
+          default: op1
     timeout-minutes: 4320
     delegates: cloudbees-io/manual-approval/custom-job.yml@v1
   hello:
