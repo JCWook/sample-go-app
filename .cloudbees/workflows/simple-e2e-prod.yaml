@@ -18,7 +18,7 @@ jobs:
           name: art1
           version: ${{ cloudbees.version }}
           url: art1::${{ cloudbees.version }}
-          target-environment: dev
+          target-environment: us-dev
     needs:
       - build
   test-deploy:
@@ -28,7 +28,7 @@ jobs:
           name: art1
           version: ${{ cloudbees.version }}
           url: art1::${{ cloudbees.version }}
-          target-environment: test
+          target-environment: us-test
     needs:
       - build
   prod-deploy:
