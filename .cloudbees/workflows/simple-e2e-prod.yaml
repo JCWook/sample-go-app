@@ -48,7 +48,6 @@ jobs:
           content: "This is from published evidence: Approved with str param: ${{fromJSON(needs.approve.outputs.approvalInputValues).str}} and comments: ${{needs.approve.outputs.comments}}"
         uses: cloudbees-io/publish-evidence-item@v1
     needs:
-      - deploy
       - approve
   approve:
     needs:
