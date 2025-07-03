@@ -1,0 +1,44 @@
+apiVersion: automation.cloudbees.io/v1alpha1
+kind: workflow
+name: add-artifact-id-lookups
+
+on:
+  workflow_dispatch:
+    inputs:
+      batch_size:
+        type: number
+        default: 1000
+        required: true
+      from_batch_number:
+        type: number
+        default: 0
+        required: true
+      to_batch_number:
+        type: number
+        default: 0
+        required: true
+      dryrun:
+        type: boolean
+        default: true
+        required: true
+
+jobs:
+  entries-for-artifactids:
+    steps:
+      - name: list-artifacts
+        uses: docker://esolang/jq:latest
+        shell: sh
+        run: |
+          batch_size=${{ inputs.batch_size }}
+          dryrun=${{ inputs.dryrun }}
+          from_batch_number=${{ inputs.from_batch_number }}
+          to_batch_number=${{ inputs.to_batch_number }}
+
+          for i in $(seq $from_batch_number $to_batch_number);
+          do
+            batch_number=$i
+            URL="${{ cloudbees.api.url }}/reserved/v1/add-artifact-id-lookups?dryrun=${dryrun}&batchSize=${batch_size}&batchNumber=${batch_number}"
+            echo "`date` - Calling: $URL"
+            curl -X PUT -H "Authorization: Bearer ${{ cloudbees.api.token }}" "$URL"
+            echo "`date` - Done"
+          done 
