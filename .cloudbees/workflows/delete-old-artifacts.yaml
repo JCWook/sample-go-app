@@ -20,7 +20,7 @@ jobs:
   find-old-artifacts:
     steps:
       - name: list-artifacts
-        uses: docker://alpine/git:latest
+        uses: docker://urvashisingh/jq:0.0.3
         shell: sh
         run: |
           batch_size=${{ inputs.batch_size }}
@@ -36,13 +36,10 @@ jobs:
             echo "Error: '$response'"
           else
             echo $response > /tmp/result.json
+            jq '.results[]' /tmp/result.json
           fi
           # echo "`date` - Done" 
-      - name: print-as-csv
-        uses: docker://urvashisingh/jq:0.0.3
-        shell: sh
-        run: |
-          jq '.results[]' /tmp/result.json
+          
 
 #on:
 #  schedule:
