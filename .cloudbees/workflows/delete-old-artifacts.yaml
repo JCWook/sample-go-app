@@ -35,8 +35,9 @@ jobs:
           then
             echo "Error: '$response'"
           else
+            jq
             echo $response > /tmp/result.json
-            jq -r '.results[]' /tmp/result.json
+            jq -r '.results[] | debug' /tmp/result.json
           fi
           # echo "`date` - Done" 
 #on:
