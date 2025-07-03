@@ -35,12 +35,12 @@ jobs:
           then
             echo "Error: '$response'"
           else
-            jq
             echo $response > /tmp/result.json
           fi
           # echo "`date` - Done" 
       - name: print-as-csv
         uses: docker://ghcr.io/jqlang/jq
+        shell: /jq
         run: |
           '.results[]' /tmp/result.json
 
