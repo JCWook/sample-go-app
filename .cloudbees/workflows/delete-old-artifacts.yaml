@@ -40,9 +40,9 @@ jobs:
           # echo "`date` - Done" 
       - name: print-as-csv
         uses: docker://ghcr.io/jqlang/jq
-        shell: /jq
+        shell: bash
         run: |
-          '.results[]' /tmp/result.json
+          /jq '.results[]' /tmp/result.json
 
 #on:
 #  schedule:
