@@ -11,6 +11,14 @@ on:
       batch_number:
         type: number
         default: 0
+      from_batch_number:
+        type: number
+        default: 0
+        required: true
+      to_batch_number:
+        type: number
+        default: 0
+        required: true  
       delete:
         type: boolean
         default: false     
@@ -26,24 +34,29 @@ jobs:
           batch_size=${{ inputs.batch_size }}
           delete=${{ inputs.delete }}
           batch_number=${{ inputs.batch_number }}
+          from_batch_number=${{ inputs.from_batch_number }}
+          to_batch_number=${{ inputs.to_batch_number }}
 
-          URL="${{ cloudbees.api.url }}/reserved/v1/delete-old-artifacts?batchSize=${batch_size}&batchNumber=${batch_number}&delete=${delete}"
-          echo "Delete? ${delete}"
-          echo "`date` - Calling: $URL"
-          response=$(curl --silent --show-error --fail-with-body -X DELETE -H "Authorization: Bearer ${{ cloudbees.api.token }}" "$URL") || command_failed=1
-          if [ ${command_failed:-0} -eq 1 ];
-          then
-            echo "Error: '$response'"
-          else
-            echo $response > /tmp/result.json
-            jq -r '.results[] | .tableName as $tblName | .artifacts[] |= {
-              artifact: .artifact + {
-                tableName: $tblName,
-                tenantName: .tenantName
-              }
-            } | .artifacts[].artifact | [ .tenantName, .tableName, .resourceId, .resourceName, .applicationId, .applicationName, .id, .name, .url, .version, .digest, .operation, .publishedBy, .publishedOn, .deployedBy, .deployedOn, .environment ] | @csv ' /tmp/result.json
-          fi
-          # echo "`date` - Done" 
+          for i in $(seq $from_batch_number $to_batch_number);
+          do
+
+            URL="${{ cloudbees.api.url }}/reserved/v1/delete-old-artifacts?batchSize=${batch_size}&batchNumber=${i}&delete=${delete}"
+            echo "Delete? ${delete}"
+            echo "`date` - Calling: $URL"
+            response=$(curl --silent --show-error --fail-with-body -X DELETE -H "Authorization: Bearer ${{ cloudbees.api.token }}" "$URL") || command_failed=1
+            if [ ${command_failed:-0} -eq 1 ];
+            then
+              echo "Error: '$response'"
+            else
+              echo $response > /tmp/result${i}.json
+              jq -r '.results[] | .tableName as $tblName | .artifacts[] |= {
+                artifact: .artifact + {
+                  tableName: $tblName,
+                  tenantName: .tenantName
+                }
+              } | .artifacts[].artifact | [ .tenantName, .tableName, .resourceId, .resourceName, .applicationId, .applicationName, .id, .name, .url, .version, .digest, .operation, .publishedBy, .publishedOn, .deployedBy, .deployedOn, .environment ] | @csv ' /tmp/result${i}.json
+            fi
+          done
           
 
 #on:
