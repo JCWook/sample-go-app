@@ -20,7 +20,7 @@ jobs:
   find-old-artifacts:
     steps:
       - name: list-artifacts
-        uses: ghcr.io/jqlang/jq
+        uses: docker://ghcr.io/jqlang/jq
         shell: sh
         run: |
           batch_size=${{ inputs.batch_size }}
