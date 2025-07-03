@@ -39,7 +39,7 @@ jobs:
           fi
           # echo "`date` - Done" 
       - name: print-as-csv
-        uses: docker://urvashisingh/jq:0.0.1
+        uses: docker://urvashisingh/jq:0.0.3
         shell: sh
         run: |
           jq '.results[]' /tmp/result.json
