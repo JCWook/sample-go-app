@@ -1,0 +1,43 @@
+apiVersion: automation.cloudbees.io/v1alpha1
+kind: workflow
+name: My workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      batch_size:
+        type: number
+        default: 25
+      batch_number:
+        type: number
+        default: 0
+      delete:
+        type: boolean
+        default: false     
+
+
+jobs:
+  find-old-artifacts:
+    steps:
+      - name: list-artifacts
+        uses: docker://esolang/jq:latest
+        shell: sh
+        run: |
+          batch_size=${{ inputs.batch_size }}
+          delete=${{ inputs.delete }}
+          batch_number=${{ inputs.batch_number }}
+
+          URL="${{ cloudbees.api.url }}/reserved/v1/delete-old-artifacts?batchSize=${batch_size}&batchNumber=${batch_number}&delete=${delete}"
+          echo "Delete? ${delete}"
+          echo "`date` - Calling: $URL"
+          response=$(curl --silent --show-error --fail-with-body -X DELETE -H "Authorization: Bearer ${{ cloudbees.api.token }}" "$URL") || command_failed=1
+          if [ ${command_failed:-0} -eq 1 ];
+          then
+            echo "Error: '$response'"
+          else
+            echo $response 
+          fi
+          # echo "`date` - Done" 
+#on:
+#  schedule:
+#    - cron: 0,5,10,15,20,25,30,35,40,45,50,55 * * * *
