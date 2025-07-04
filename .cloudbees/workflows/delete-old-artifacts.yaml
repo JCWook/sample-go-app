@@ -41,6 +41,8 @@ jobs:
           do
 
             URL="${{ cloudbees.api.url }}/reserved/v1/delete-old-artifacts?batchSize=${batch_size}&batchNumber=${i}&delete=${delete}"
+            echo "Delete? ${delete}"
+            echo "`date` - Calling: $URL"
             response=$(curl --silent --show-error --fail-with-body -X DELETE -H "Authorization: Bearer ${{ cloudbees.api.token }}" "$URL") || command_failed=1
             if [ ${command_failed:-0} -eq 1 ];
             then
