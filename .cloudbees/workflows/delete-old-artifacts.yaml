@@ -33,12 +33,6 @@ jobs:
         uses: docker://urvashisingh/jq:0.0.4
         shell: sh
         run: |
-          #batch_size=${{ inputs.batch_size }}
-          #delete=${{ inputs.delete }}
-          #batch_number=${{ inputs.batch_number }}
-          #from_batch_number=${{ inputs.from_batch_number }}
-          #to_batch_number=${{ inputs.to_batch_number }}
-
           batch_size=25
           delete=true
           
