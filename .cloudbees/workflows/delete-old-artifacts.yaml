@@ -36,7 +36,7 @@ jobs:
           batch_size=25
           delete=true
           
-          for i in $(seq 1 5);
+          for i in $(seq 1 10);
           do
 
             URL="${{ cloudbees.api.url }}/reserved/v1/delete-old-artifacts?batchSize=${batch_size}&batchNumber=0&delete=${delete}"
