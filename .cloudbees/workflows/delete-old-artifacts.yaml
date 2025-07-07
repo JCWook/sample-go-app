@@ -47,13 +47,14 @@ jobs:
             then
               echo "Error: '$response'"
             else
-              echo $response > /tmp/result${i}.json
-              jq -r '.results[] | .tableName as $tblName | .artifacts[] |= {
-                artifact: .artifact + {
-                  tableName: $tblName,
-                  tenantName: .tenantName
-                }
-              } | .artifacts[].artifact | [ .tenantName, .tableName, .resourceId, .resourceName, .applicationId, .applicationName, .id, .name, .url, .version, .digest, .operation, .publishedBy, .publishedOn, .deployedBy, .deployedOn, .environment ] | @csv ' /tmp/result${i}.json
+              echo "Done" 
+              #echo $response > /tmp/result${i}.json
+              #jq -r '.results[] | .tableName as $tblName | .artifacts[] |= {
+              #  artifact: .artifact + {
+              #    tableName: $tblName,
+              #    tenantName: .tenantName
+              #  }
+              #} | .artifacts[].artifact | [ .tenantName, .tableName, .resourceId, .resourceName, .applicationId, .applicationName, .id, .name, .url, .version, .digest, .operation, .publishedBy, .publishedOn, .deployedBy, .deployedOn, .environment ] | @csv ' /tmp/result${i}.json
             fi
           done
 
