@@ -50,9 +50,8 @@ jobs:
               echo "looking for a match... "x${digest}X""
               echo $response | jq '.artifacts'
               
-              if [ "$digest" == "null" ];
-              then
-                echo "wo digest"
+              if [ "$digest" = "null" ]; then
+                echo "wo digest $digest."
                 echo $response | jq '.artifacts[] | select(.version=="$version" and .url=="$url")'  
               else
                 echo "with digest"
