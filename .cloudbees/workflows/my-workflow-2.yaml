@@ -47,7 +47,7 @@ jobs:
               echo "Failed to lookup artifact: $name, error: '$response'"
             else
               echo $response | jq  
-              echo "looking for a match..."
+              echo "looking for a match... "x${digest}X""
               echo $response | jq '.artifacts'
               
               if [ "x$digest" == "x" ];
