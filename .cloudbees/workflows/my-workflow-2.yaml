@@ -47,6 +47,8 @@ jobs:
               echo "Failed to register artifact: $name, error: '$response'"
             else
               echo $response | jq  
+              echo "looking for a match..."
+              echo $response | jq '.[] | select(.version=="$version" and .url=="$url")'
             fi  
           }
 
