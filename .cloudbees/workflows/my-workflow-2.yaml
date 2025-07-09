@@ -2,29 +2,82 @@ apiVersion: automation.cloudbees.io/v1alpha1
 kind: workflow
 name: My workflow
 on:
-  push:
-    branches:
-      - "**"
   workflow_dispatch:
     inputs:
-      manifest:
+      name:
         type: string
+      version:
+        type: string
+      url:
+        type: string
+      digest:
+        type: string
+      org-id:
+        type: string      
 jobs:
   build:
     steps:
-      - uses: docker://golang:1.20.3-alpine3.17
-        shell: sh
+      - uses: docker://ghcr.io/helmfile/helmfile:v1.1.2
+        env:
+          JWT: ${{ cloudbees.api.token }}
+          CB_API_URL: ${{ cloudbees.api.url }}
+          CB_RUN_ID: ${{ cloudbees.run_id }}
+          CB_RUN_ATTEMPT: ${{ cloudbees.run_attempt }}
         run: |
-          echo "Input manifest:"
-          echo ${{ toJSON(inputs.manifest) }} > /tmp/manifest.json
-          cat /tmp/manifest.json
-      - uses: https://github.com/urvashisingh/try-api-action
-        name: Step One
-        with:
-          uri: /v1/organizations
-          http-method: GET
-      - uses: https://github.com/urvashisingh/try-api-action
-        name: Step Two
-        with:
-          uri: /v1/organizations
-          http-method: GET        
+          set -eo pipefail
+
+          function get-artifact-id() {
+            name=$1
+            version=$2
+            url=$3
+            digest=$4
+            org_id=$5
+
+            echo "Find artifact with name: $name, version: $version, url: $url, digest: $digest in org $org_id ..."
+            query_params="filter.names=${name}&filter.latestOnly=false&filter.searchText=${version}"
+            
+            echo "query params: $query_params, url: $CB_API_URL, JWT:$JWT"
+            response=$(curl --silent --show-error --fail-with-body  -X 'GET' "$CB_API_URL/v3/organizations/${org_id}/artifactinfos?${query_params}" \
+              -H "Authorization: Bearer $JWT" \
+              -H 'Content-Type: application/json') || command_failed=1
+
+            if [ ${command_failed:-0} -eq 1 ];
+            then
+              echo "Failed to register artifact: $name, error: '$response'"
+            else
+              echo $response | jq  
+            fi  
+          }
+
+          function register-deployment() {
+            name=$1
+            version=$2
+            url=$3
+            digest=$4
+
+            echo "Registering artifact with name: $name, version: $version, $url, $digest ..."
+            PAYLOAD=$(jq --null-input \
+            --arg name "$name" \
+            --arg version "$version" \
+            --arg url "$url" \
+            --arg digest "$digest" \
+            --arg runId "$CB_RUN_ID" \
+            --arg runAttempt "$CB_RUN_ATTEMPT" \
+            --arg environment "$ENVIRONMENT" \
+            '{"runId": $runId, "runAttempt": $runAttempt, "name": $name, "version": $version, "url": $url, "digest": $digest, "environment": $environment, "operation": "DEPLOYED"}')
+
+            echo "payload: $PAYLOAD, url: $CB_API_URL, JWT:$JWT"
+            response=$(curl --silent --show-error --fail-with-body  -X 'POST' "$CB_API_URL/v2/workflows/runs/artifactinfos" \
+              -H "Authorization: Bearer $JWT" \
+              -H 'Content-Type: application/json' \
+              -d "$PAYLOAD") || command_failed=1
+
+            if [ ${command_failed:-0} -eq 1 ];
+            then
+              echo "Failed to register artifact: $name, error: '$response'"
+            else
+              echo $response | jq  
+            fi  
+          }
+
+          get-artifact-id ${{ inputs.name }} ${{ inputs.version }} ${{ inputs.url }} ${{ inputs.digest }} ${{ cloudbees.org_id }}
