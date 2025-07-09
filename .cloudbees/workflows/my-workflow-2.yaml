@@ -19,7 +19,7 @@ jobs:
     steps:
       - uses: docker://ghcr.io/helmfile/helmfile:v1.1.2
         env:
-          JWT: ${{ cloudbees.api.token }}
+          CBP_API_PAT: ${{ secrets.CBP_API_PAT }}
           CB_API_URL: ${{ cloudbees.api.url }}
           CB_RUN_ID: ${{ cloudbees.run_id }}
           CB_RUN_ATTEMPT: ${{ cloudbees.run_attempt }}
@@ -31,14 +31,14 @@ jobs:
             version=$2
             url=$3
             digest=$4
-            org_id=$5
+            app_id=$5
 
             echo "Find artifact with name: $name, version: $version, url: $url, digest: $digest in org $org_id ..."
             query_params="filter.names=${name}&filter.latestOnly=false&filter.searchText=${version}"
             
             echo "query params: $query_params, url: $CB_API_URL, JWT:$JWT"
-            response=$(curl --silent --show-error --fail-with-body  -X 'GET' "$CB_API_URL/v3/organizations/${org_id}/artifactinfos?${query_params}" \
-              -H "Authorization: Bearer $JWT" \
+            response=$(curl --silent --show-error --fail-with-body  -X 'GET' "$CB_API_URL/v3/applications/${app_id}/artifactinfos?${query_params}" \
+              -H "Authorization: Bearer $CBP_API_PAT" \
               -H 'Content-Type: application/json') || command_failed=1
 
             if [ ${command_failed:-0} -eq 1 ];
