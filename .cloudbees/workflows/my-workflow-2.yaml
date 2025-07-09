@@ -46,16 +46,14 @@ jobs:
             then
               echo "Failed to lookup artifact: $name, error: '$response'"
             else
-              echo $response | jq  
-              echo "looking for a match... "x${digest}X""
-              echo $response | jq '.artifacts'
+              echo $response | jq '.artifacts[]'
               
               if [ "$digest" = "null" ]; then
                 echo "wo digest"
-                echo $response | jq '.artifacts[] | select(.version=="$version" and .url=="$url")'  
+                echo $response | jq --arg version $version --arg url $url '.artifacts[] | select(.version==$version and .url==$url)'  
               else
                 echo "with digest"
-                echo $response | jq '.artifacts[] | select(.version=="$version" and .url=="$url" and .digest=="$digest")'
+                echo $response | jq --arg version $version --arg url $url --arg digest $digest '.artifacts[] | select(.version==$version and .url==$url and .digest==$digest)'
               fi
             fi  
           }
