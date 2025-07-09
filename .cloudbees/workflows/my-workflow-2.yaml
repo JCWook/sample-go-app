@@ -48,45 +48,7 @@ jobs:
             else
               echo $response | jq  
               echo "looking for a match..."
-              if [ "$digest" -ne "" ];
-              then
-                echo "with digest"
-                echo $response | jq '.artifacts[] | select(.version=="$version" and .url=="$url" and .digest=="$digest")'  
-              else
-                echo "wo digest"
-                echo $response | jq '.artifacts'
-              fi
-            fi  
-          }
-
-          function register-deployment() {
-            name=$1
-            version=$2
-            url=$3
-            digest=$4
-
-            echo "Registering artifact with name: $name, version: $version, $url, $digest ..."
-            PAYLOAD=$(jq --null-input \
-            --arg name "$name" \
-            --arg version "$version" \
-            --arg url "$url" \
-            --arg digest "$digest" \
-            --arg runId "$CB_RUN_ID" \
-            --arg runAttempt "$CB_RUN_ATTEMPT" \
-            --arg environment "$ENVIRONMENT" \
-            '{"runId": $runId, "runAttempt": $runAttempt, "name": $name, "version": $version, "url": $url, "digest": $digest, "environment": $environment, "operation": "DEPLOYED"}')
-
-            echo "payload: $PAYLOAD, url: $CB_API_URL, JWT:$JWT"
-            response=$(curl --silent --show-error --fail-with-body  -X 'POST' "$CB_API_URL/v2/workflows/runs/artifactinfos" \
-              -H "Authorization: Bearer $JWT" \
-              -H 'Content-Type: application/json' \
-              -d "$PAYLOAD") || command_failed=1
-
-            if [ ${command_failed:-0} -eq 1 ];
-            then
-              echo "Failed to register artifact: $name, error: '$response'"
-            else
-              echo $response | jq  
+              echo $response | jq '.artifacts'
             fi  
           }
 
