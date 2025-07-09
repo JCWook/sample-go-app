@@ -44,11 +44,15 @@ jobs:
 
             if [ ${command_failed:-0} -eq 1 ];
             then
-              echo "Failed to register artifact: $name, error: '$response'"
+              echo "Failed to lookup artifact: $name, error: '$response'"
             else
               echo $response | jq  
               echo "looking for a match..."
-              echo $response | jq '.[] | select(.version=="$version" and .url=="$url")'
+              if [ $digest -ne "" ];
+                echo $response | jq '.[] | select(.version=="$version" and .url=="$url" and .digest=="$digest")'  
+              else
+                echo $response | jq '.[] | select(.version=="$version" and .url=="$url")'
+              fi
             fi  
           }
 
