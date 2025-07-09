@@ -48,11 +48,13 @@ jobs:
             else
               echo $response | jq  
               echo "looking for a match..."
-              if [ $digest -ne "" ];
+              if [ "$digest" -ne "" ];
               then
+                echo "with digest"
                 echo $response | jq '.artifacts[] | select(.version=="$version" and .url=="$url" and .digest=="$digest")'  
               else
-                echo $response | jq '.artifacts[] | select(.version=="$version" and .url=="$url")'
+              echo "wo digest"
+                echo $response | jq '.artifacts[]'
               fi
             fi  
           }
