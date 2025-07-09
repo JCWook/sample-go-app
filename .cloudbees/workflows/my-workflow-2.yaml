@@ -50,7 +50,7 @@ jobs:
               echo "looking for a match..."
               echo $response | jq '.artifacts'
               
-              if [ "$digest" -eq "" ];
+              if [ "$digest" == "" ];
               then
                 echo "wo digest"
                 echo $response | jq '.artifacts[] | select(.version=="0.0.630")'  
