@@ -12,8 +12,9 @@ on:
         type: string
       digest:
         type: string
-      org-id:
-        type: string      
+      app_id:
+        type: string 
+        default: 649308a1-7837-430f-955b-0d1dcc27c319     
 jobs:
   build:
     steps:
@@ -36,7 +37,7 @@ jobs:
             echo "Find artifact with name: $name, version: $version, url: $url, digest: $digest in org $org_id ..."
             query_params="filter.names=${name}&filter.latestOnly=false&filter.searchText=${version}"
             
-            echo "query params: $query_params, url: $CB_API_URL, JWT:$JWT"
+            echo "query params: $query_params, url: $CB_API_URL"
             response=$(curl --silent --show-error --fail-with-body  -X 'GET' "$CB_API_URL/v3/applications/${app_id}/artifactinfos?${query_params}" \
               -H "Authorization: Bearer $CBP_API_PAT" \
               -H 'Content-Type: application/json') || command_failed=1
@@ -80,4 +81,4 @@ jobs:
             fi  
           }
 
-          get-artifact-id ${{ inputs.name }} ${{ inputs.version }} ${{ inputs.url }} ${{ inputs.digest }} ${{ cloudbees.org.id }}
+          get-artifact-id ${{ inputs.name }} ${{ inputs.version }} ${{ inputs.url }} ${{ inputs.digest }} ${{ inputs.app_id }}
