@@ -80,4 +80,4 @@ jobs:
             fi  
           }
 
-          get-artifact-id ${{ inputs.name }} ${{ inputs.version }} ${{ inputs.url }} ${{ inputs.digest }} ${{ cloudbees.org }}
+          get-artifact-id ${{ inputs.name }} ${{ inputs.version }} ${{ inputs.url }} ${{ inputs.digest }} ${{ cloudbees.org.id }}
