@@ -28,12 +28,12 @@ jobs:
           set -eo pipefail
 
           function get-artifact-id() {
-            name=$1
-            version=$2
-            url=$3
-            digest=$4
-            app_id=$5
-            out_artifact_id=$6
+            local name=$1
+            local version=$2
+            local url=$3
+            local digest=$4
+            local app_id=$5
+            local out_artifact_id=$6
 
             echo "Find artifact with name: $name, version: $version, url: $url, digest: $digest in org $org_id ..."
             query_params="filter.names=${name}&filter.latestOnly=false&filter.searchText=${version}"
