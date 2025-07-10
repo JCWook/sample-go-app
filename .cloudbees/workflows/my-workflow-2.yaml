@@ -96,7 +96,7 @@ jobs:
           get-artifact-id "${{ inputs.name }}" "${{ inputs.version }}" "${{ inputs.url }}" "${{ inputs.digest }}" "${{ inputs.app_id }}" artifact_id
           echo "Found artifactId: $artifact_id"
           if [ -n "$artifact_id" ]; then
-            echo "Variable exists and is not empty"
+            register-deployment "$artifact_id"
           else
             echo "Variable is empty or not set"
           fi
