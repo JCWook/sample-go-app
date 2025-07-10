@@ -50,12 +50,18 @@ jobs:
               
               if [ "$digest" = "null" ]; then
                 echo "wo digest"
-                echo $response | jq --arg version $version --arg url $url '[.artifacts[] | select(.version==$version and .url==$url)] | .[0]'  
+                artifact_id="$(echo $response | jq --raw-output --arg version $version --arg url $url '[.artifacts[] | select(.version==$version and .url==$url)] | .[0]')"  
               else
                 echo "with digest"
-                echo $response | jq --arg version $version --arg url $url --arg digest $digest '[.artifacts[] | select(.version==$version and .url==$url and .digest==$digest)] | .[0]'
+                artifact_id="$(echo $response | jq --raw-output --arg version $version --arg url $url --arg digest $digest '[.artifacts[] | select(.version==$version and .url==$url and .digest==$digest)] | .[0]')"
+              fi
+              if [ "$artifact_id" = "null" ]; then
+                echo ""  
+              else
+                echo $artifact_id
               fi
             fi  
           }
 
-          get-artifact-id ${{ inputs.name }} ${{ inputs.version }} ${{ inputs.url }} ${{ inputs.digest }} ${{ inputs.app_id }}
+          art_id=`get-artifact-id ${{ inputs.name }} ${{ inputs.version }} ${{ inputs.url }} ${{ inputs.digest }} ${{ inputs.app_id }}`
+          echo "Found artifactId: $art_id"
