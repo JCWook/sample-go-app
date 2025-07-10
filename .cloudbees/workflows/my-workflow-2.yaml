@@ -18,7 +18,7 @@ on:
 jobs:
   build:
     env:
-      ENVIRONMENT: dev
+      ENVIRONMENT: us-prod
     steps:
       - uses: docker://ghcr.io/helmfile/helmfile:v1.1.2
         env:
