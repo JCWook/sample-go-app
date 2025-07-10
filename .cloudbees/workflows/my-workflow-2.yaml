@@ -50,10 +50,10 @@ jobs:
               
               if [ "$digest" = "null" ]; then
                 echo "wo digest"
-                echo $response | jq --arg version $version --arg url $url '.artifacts[] | select(.version==$version and .url==$url)'  
+                echo $response | jq --arg version $version --arg url $url '[.artifacts[] | select(.version==$version and .url==$url)] | .[0]'  
               else
                 echo "with digest"
-                echo $response | jq --arg version $version --arg url $url --arg digest $digest '.artifacts[] | select(.version==$version and .url==$url and .digest==$digest)'
+                echo $response | jq --arg version $version --arg url $url --arg digest $digest '[.artifacts[] | select(.version==$version and .url==$url and .digest==$digest)] | .[0]'
               fi
             fi  
           }
