@@ -17,9 +17,12 @@ on:
         default: 649308a1-7837-430f-955b-0d1dcc27c319     
 jobs:
   build:
+    env:
+      ENVIRONMENT: dev
     steps:
       - uses: docker://ghcr.io/helmfile/helmfile:v1.1.2
         env:
+          JWT: ${{ cloudbees.api.token }}
           CBP_API_PAT: ${{ secrets.CBP_API_PAT }}
           CB_API_URL: ${{ cloudbees.api.url }}
           CB_RUN_ID: ${{ cloudbees.run_id }}
@@ -57,7 +60,7 @@ jobs:
                 echo "with digest"
                 artifact_id="$(echo "$response" | jq --raw-output --arg version "$version" --arg url "$url" --arg digest "$digest" '[.artifacts[] | select(.version==$version and .url==$url and .digest==$digest)] | .[0].id')"
               fi
-              if [ "$artifact_id" = "null" ]; then
+              if [ "$artifact_id" = "null" ] || [ -z "$artifact_id" ]; then
                 eval $out_artifact_id="" 
               else
                 eval $out_artifact_id="'$artifact_id'"
@@ -65,5 +68,35 @@ jobs:
             fi  
           }
 
-          get-artifact-id "${{ inputs.name }}" "${{ inputs.version }}" "${{ inputs.url }}" "${{ inputs.digest }}" "${{ inputs.app_id }}" art_id
-          echo "Found artifactId: $art_id"
+          function register-deployment-with-id() {
+            artifact_id=$1
+            
+            echo "Registering deployment for artifact id: $artifact_id ..."
+            PAYLOAD=$(jq --null-input \
+            --arg artifact_id "$artifact_id" \
+            --arg runId "$CB_RUN_ID" \
+            --arg runAttempt "$CB_RUN_ATTEMPT" \
+            --arg environment "$ENVIRONMENT" \
+            '{"runId": $runId, "runAttempt": $runAttempt, "artifact_id": $artifact_id, "environment": $environment}')
+
+            echo "payload: $PAYLOAD, url: $CB_API_URL, JWT:$JWT"
+            response=$(curl --silent --show-error --fail-with-body  -X 'POST' "$CB_API_URL/v3/deployments" \
+              -H "Authorization: Bearer $JWT" \
+              -H 'Content-Type: application/json' \
+              -d "$PAYLOAD") || command_failed=1
+
+            if [ ${command_failed:-0} -eq 1 ];
+            then
+              echo "Failed to add deployment for artifact_id: $artifact_id, error: '$response'"
+            else
+              echo $response | jq  
+            fi  
+          }
+
+          get-artifact-id "${{ inputs.name }}" "${{ inputs.version }}" "${{ inputs.url }}" "${{ inputs.digest }}" "${{ inputs.app_id }}" artifact_id
+          echo "Found artifactId: $artifact_id"
+          if [ -n "$artifact_id" ]; then
+            echo "Variable exists and is not empty"
+          else
+            echo "Variable is empty or not set"
+          fi
