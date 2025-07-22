@@ -13,8 +13,10 @@ on:
       digest:
         type: string
       app_id:
-        type: string 
-        default: 649308a1-7837-430f-955b-0d1dcc27c319     
+        type: string
+        default: 649308a1-7837-430f-955b-0d1dcc27c319
+  schedule:
+    - cron: 51,56 * * * *
 jobs:
   build:
     env:
