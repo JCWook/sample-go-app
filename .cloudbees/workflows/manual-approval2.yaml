@@ -8,8 +8,6 @@ on:
   workflow_dispatch:
 jobs:
   asknow:
-    jobId: asknow-id
-    name: Ask Now For Approval
     with:
       disallowLaunchByUser: false
       instructions: manual approval test using handler image from public prod ECR registry
