@@ -8,6 +8,7 @@ on:
   workflow_dispatch:
 jobs:
   asknow:
+    displayName: "Ask now for app"
     with:
       disallowLaunchByUser: false
       instructions: manual approval test using handler image from public prod ECR registry
