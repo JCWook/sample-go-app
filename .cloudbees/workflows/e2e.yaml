@@ -21,12 +21,12 @@ jobs:
         kind: deploy
         with:
           registry: index.docker.io
-          username: ${{ vars.QUICKSTART_DOCKER_USERNAME }}
+          username: ${{ secrets.QUICKSTART_DOCKER_USERNAME }}
           password: ${{ secrets.QUICKSTART_DOCKER_PASSWORD }}
       - uses: cloudbees-io/kaniko@v1
         name: Push image to OCI registry
         with:
-          destination: index.docker.io/${{ vars.QUICKSTART_DOCKER_USERNAME }}/my-sample-go-app:${{cloudbees.version}}
+          destination: index.docker.io/${{ secrets.QUICKSTART_DOCKER_USERNAME }}/my-sample-go-app:${{cloudbees.version}}
   approve-me:
     needs:
       - build
