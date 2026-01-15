@@ -1,17 +1,47 @@
 apiVersion: automation.cloudbees.io/v1alpha1
 kind: workflow
-name: My workflow
-
+name: test-rate-limit
 on:
-  push:
-    branches:
-      - '**'
+  workflow_dispatch:
 
 jobs:
   build:
     steps:
-      - name: Say hello
-        uses: docker://golang:1.20.3-alpine3.17
-        shell: sh
+      - name: Create and run CloudBees Unify release
+        id: release
+        uses: guru-actions/create_release@feature/prevent-concurrent-releases
+        with:
+          cb_api_token: ${{ secrets.sb_internal_api }}
+          cb_org_id: "6a861c04-3e2f-4a48-7752-79bce4d241b8"
+          cb_application_id: "649308a1-7837-430f-955b-0d1dcc27c319"
+          cb_workflow_id: "8b2b3022-9b50-49a5-a36a-c053b9204938"
+          cb_environment: "us-dev"
+          release_name_prefix: "rel-test-sb-"
+          close_on_pass: "true"
+          skip_release_on_missing_artifacts: "false"
+          selection_report_format: "markdown"
+          prevent_concurrent_releases: "wait"
+     
+      - name: Show status
+        uses: docker://alpine:3.18
         run: |
-          echo "hello world"
+          echo "==================== RELEASE STATUS ===================="
+          echo "Status: ${{ steps.release.outputs.status }}"
+          echo "Release ID: ${{ steps.release.outputs.release_id }}"
+          echo "Release Name: ${{ steps.release.outputs.release_name }}"
+          echo "Run ID: ${{ steps.release.outputs.run_id }}"
+          echo "========================================================"
+
+      - name: Show report
+        uses: docker://alpine:3.18
+        run: |
+          echo "==================== RELEASE REPORT ===================="
+          echo "${{ steps.release.outputs.selection_report }}"
+          echo "======================================================="
+
+      - name: Publish release evidence
+        kind: deploy
+        uses: cloudbees-io/publish-evidence-item@v1
+        with:
+          format: MARKDOWN
+          content: ${{ steps.release.outputs.selection_report }}
