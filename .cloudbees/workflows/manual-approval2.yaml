@@ -27,4 +27,4 @@ jobs:
       - uses: docker://alpine/git:latest
         run: |
           echo "test"
-    needs: ask-now
+    needs: asknow
