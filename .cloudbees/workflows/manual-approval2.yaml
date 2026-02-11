@@ -21,7 +21,7 @@ jobs:
             - op1
           default: op1
     timeout-minutes: 4320
-    delegates: cloudbees-io/manual-approval/custom-job.yml@v1
+    delegates: cloudbees-io/manual-approval/.cloudbees/testing/custom-job.yml@main
   hello:
     steps:
       - uses: docker://alpine/git:latest
