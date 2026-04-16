@@ -5,6 +5,7 @@ on:
   workflow_dispatch:
 jobs:
   build:
+    environment: us-test-appr
     steps:
       - uses: docker://alpine/git:latest
         run: |
