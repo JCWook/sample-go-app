@@ -45,27 +45,4 @@ jobs:
           default: ""
     timeout-minutes: 4320
     delegates: cloudbees-io/manual-approval/custom-job.yml@v1
-  register-deploy-artifact:
-    if: ${{ true }}
-    needs:
-      - approve-me
-    steps:
-      - uses: cloudbees-io/register-deployed-artifact@v2
-        name: step1
-        with:
-          version: "1.1"
-          url: art-url
-          digest: d1
-          name: art1
-          target-environment: us-env
-  job1:
-    steps:
-      - uses: cloudbees-io/register-deployed-artifact@v2
-        name: step1
-        with:
-          version: "1.1"
-          url: art-url
-          digest: d1
-          name: art1
-          target-environment: us-env
-    needs: register-deploy-artifact
+  
