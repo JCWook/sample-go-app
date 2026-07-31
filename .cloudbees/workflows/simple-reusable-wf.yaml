@@ -3,14 +3,18 @@ kind: workflow
 name: My workflow
 on:
   workflow_call:
+    inputs:
+      environment:
+        type: string
+        required: true
     secrets:
       secret1: { required: true }
 jobs:
-  build:
+  deploy:
     steps:
       - name: Say hello
         uses: docker://golang:1.20.3-alpine3.17
         shell: sh
         run: |
-          echo "hello world"
+          echo "deploying to ${{ inputs.environment }}"
           if [ -n "${{ secrets.secret1 }}" ]; then echo "secret1 available"; fi
