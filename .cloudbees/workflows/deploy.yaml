@@ -13,6 +13,8 @@ on:
     secrets:
       env_secret: 
         required: true
+      env_secret2: 
+        required: true  
           
   workflow_dispatch:
     inputs:
@@ -39,7 +41,8 @@ jobs:
         run: |
           echo "Deploying ${{ steps.get-artifact-details.outputs.name }}:${{ steps.get-artifact-details.outputs.version }} from ${{ steps.get-artifact-details.outputs.url }}"
           echo "Environment: ${{ inputs.environment }}" 
-          echo "Env secret (won't print, just to show it exists): ${{ secrets.env_secret }}"
+          echo "Env secret 1 (won't print, just to show it exists): ${{ secrets.env_secret }}"
+          echo "Env secret 2 (won't print, just to show it exists): ${{ secrets.env_secret2 }}"
       - name: Register deployment
         uses: cloudbees-io/register-deployed-artifact@v2
         with:
