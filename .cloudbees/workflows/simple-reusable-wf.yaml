@@ -3,6 +3,8 @@ kind: workflow
 name: My workflow
 on:
   workflow_call:
+    secrets:
+      secret1: { required: true }
 jobs:
   build:
     steps:
@@ -11,3 +13,4 @@ jobs:
         shell: sh
         run: |
           echo "hello world"
+          if [ -n "${{ secrets.secret1 }}" ]; then echo "secret1 available"; fi
