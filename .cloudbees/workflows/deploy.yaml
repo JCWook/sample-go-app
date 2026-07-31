@@ -11,7 +11,8 @@ on:
         type: string
         required: true
     secrets:
-      env-secret: {required: true}
+      env-secret: 
+        required: true
           
   workflow_dispatch:
     inputs:
