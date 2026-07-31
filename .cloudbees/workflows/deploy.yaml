@@ -15,28 +15,30 @@ on:
       artifact-id:
         type: string
         required: true
-        default: "f4456051-01bf-4f64-b0b2-d0c84df854d8"
+        default: f4456051-01bf-4f64-b0b2-d0c84df854d8
       environment:
         type: string
         required: true
         default: us-dev
+  push:
+    branches:
+      - main
+      - "**"
 jobs:
   Deploy:
-    environment: ${{ inputs.environment }}
     steps:
       - name: Get artifact details
         id: get-artifact-details
         uses: cloudbees-io/get-artifact-details@v1
-        with: 
+        with:
           artifact-id: ${{ inputs.artifact-id }}
       - name: Deploy artifact
         uses: docker://golang:1.20.3-alpine3.17
         shell: sh
         run: |
-          echo "Deploying ${{ steps.get-artifact-details.outputs.name }}:${{ steps.get-artifact-details.outputs.version }} from ${{ steps.get-artifact-details.outputs.url }} to ${{ job.environment }}" 
+          echo "Deploying ${{ steps.get-artifact-details.outputs.name }}:${{ steps.get-artifact-details.outputs.version }} from ${{ steps.get-artifact-details.outputs.url }} to ${{ inputs.environment }}" 
       - name: Register deployment
         uses: cloudbees-io/register-deployed-artifact@v2
         with:
           artifact-id: ${{ inputs.artifact-id }}
-        
-        
+          target-environment: ${{ inputs.environment }}
