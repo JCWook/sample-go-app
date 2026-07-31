@@ -7,7 +7,7 @@ on:
       artifact-id:
         type: string
         required: true
-      env:
+      environment:
         type: string
         required: true
   workflow_dispatch:
@@ -16,7 +16,7 @@ on:
         type: string
         required: true
         default: f4456051-01bf-4f64-b0b2-d0c84df854d8
-      env:
+      environment:
         type: string
         required: true
         default: us-dev
@@ -36,9 +36,9 @@ jobs:
         uses: docker://golang:1.20.3-alpine3.17
         shell: sh
         run: |
-          echo "Deploying ${{ steps.get-artifact-details.outputs.name }}:${{ steps.get-artifact-details.outputs.version }} from ${{ steps.get-artifact-details.outputs.url }} to ${{ inputs.env }}" 
+          echo "Deploying ${{ steps.get-artifact-details.outputs.name }}:${{ steps.get-artifact-details.outputs.version }} from ${{ steps.get-artifact-details.outputs.url }} to ${{ inputs.environment }}" 
       - name: Register deployment
         uses: cloudbees-io/register-deployed-artifact@v2
         with:
           artifact-id: ${{ inputs.artifact-id }}
-          target-environment: ${{ inputs.env }}
+          target-environment: ${{ inputs.environment }}
