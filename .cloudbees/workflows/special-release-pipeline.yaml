@@ -1,0 +1,31 @@
+apiVersion: automation.cloudbees.io/v1alpha1
+kind: workflow
+name: deploy
+on:
+  workflow_call:
+    inputs:
+      param1:
+        type: string
+        required: true
+      dev_environment:
+        type: string
+        required: true
+  workflow_dispatch:
+    inputs:
+      param1:
+        type: string
+        required: true
+      dev_environment:
+        type: string
+        required: true
+
+jobs:
+  dev:
+    steps:
+      - name: Deploy artifact
+        uses: docker://golang:1.20.3-alpine3.17
+        shell: sh
+        run: |
+          echo "Deploying to ${{ inputs.dev_environment }}" 
+          echo "Secret 1 ${{ secrets.secret1 }}"
+
