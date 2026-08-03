@@ -16,6 +16,12 @@ on:
       us_dev_secret1:  
         type: string
         required: true  
+      us_prod_prop1:
+        type: string
+        required: true  
+      us_prod_secret1:  
+        type: string
+        required: true   
   workflow_dispatch:
     inputs:
       param1:
@@ -32,6 +38,12 @@ on:
       us_dev_secret1:  
         type: string
         required: true
+      us_prod_prop1:
+        type: string
+        required: true  
+      us_prod_secret1:  
+        type: string
+        required: true  
 
 jobs:
   dev:
@@ -46,3 +58,15 @@ jobs:
           echo "Env property as input us_dev_prop1: ${{ inputs.us_dev_prop1 }}"
           echo "Env secret as input us_dev_secret1: ${{ inputs.us_dev_secret1 }}"
 
+  prod:
+    needs: dev
+    steps:
+      - name: Deploy artifact
+        uses: docker://golang:1.20.3-alpine3.17
+        shell: sh
+        run: |
+          echo "Deploying to env: ${{ inputs.prod_environment }}" 
+          echo "Property (thru resource hierarchy) prop1: ${{ vars.prop1 }}"
+          echo "Secret (thru resource hierarchy) secret 1 ${{ secrets.secret1 }}"
+          echo "Env property as input us_prod_prop1: ${{ inputs.us_prod_prop1 }}"
+          echo "Env secret as input us_prod_secret1: ${{ inputs.us_prod_secret1 }}"
