@@ -41,8 +41,8 @@ jobs:
         shell: sh
         run: |
           echo "Deploying to env: ${{ inputs.dev_environment }}" 
-          echo "Property prop1: ${{ vars.prop1 }}"
-          echo "Secret 1 ${{ secrets.secret1 }}"
-          echo "Property prop1: ${{ inputs.us_dev_prop1 }}"
-          echo "Secret 1 ${{ inputs.us_dev_secret1 }}"
+          echo "Property (thru resource hierarchy) prop1: ${{ vars.prop1 }}"
+          echo "Secret (thru resource hierarchy) secret 1 ${{ secrets.secret1 }}"
+          echo "Env property as input us_dev_prop1: ${{ inputs.us_dev_prop1 }}"
+          echo "Env secret as input us_dev_secret1: ${{ inputs.us_dev_secret1 }}"
 
