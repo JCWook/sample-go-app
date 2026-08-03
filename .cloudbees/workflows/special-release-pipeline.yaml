@@ -16,6 +16,9 @@ on:
       us_dev_secret1:  
         type: string
         required: true  
+      prod_environment:
+        type: string
+        required: true  
       us_prod_prop1:
         type: string
         required: true  
@@ -38,6 +41,9 @@ on:
       us_dev_secret1:  
         type: string
         required: true
+      prod_environment:
+        type: string
+        required: true    
       us_prod_prop1:
         type: string
         required: true  
