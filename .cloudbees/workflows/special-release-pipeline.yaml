@@ -10,6 +10,9 @@ on:
       dev_environment:
         type: string
         required: true
+      us_dev_prop1:
+        type: string
+        required: true  
   workflow_dispatch:
     inputs:
       param1:
@@ -20,6 +23,9 @@ on:
         type: string
         required: true
         default: us-dev
+      us_dev_prop1:
+        type: string
+        required: true  
 
 jobs:
   dev:
@@ -31,6 +37,6 @@ jobs:
           echo "Deploying to env: ${{ inputs.dev_environment }}" 
           echo "Property prop1: ${{ vars.prop1 }}"
           echo "Secret 1 ${{ secrets.secret1 }}"
-          echo "Property prop1: ${{ vars.us_dev_prop1 }}"
+          echo "Property prop1: ${{ inputs.us_dev_prop1 }}"
           echo "Secret 1 ${{ secrets.us_dev_secret1 }}"
 
