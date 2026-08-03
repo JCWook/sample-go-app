@@ -26,6 +26,7 @@ jobs:
         uses: docker://golang:1.20.3-alpine3.17
         shell: sh
         run: |
-          echo "Deploying to ${{ inputs.dev_environment }}" 
+          echo "Deploying to env: ${{ inputs.dev_environment }}" 
+          echo "Property prop1: ${{ vars.prop1 }}"
           echo "Secret 1 ${{ secrets.secret1 }}"
 
